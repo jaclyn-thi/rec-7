@@ -6,26 +6,21 @@ import { useUserStore } from "@/stores/user";
 import { fetchy } from "@/utils/fetchy";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
-// import { useRouter } from "vue-router";
-// import SearchPostForm from "./SearchPostForm.vue";
 
 const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
 
 const loaded = ref(false);
 let posts = ref<Array<Record<string, string>>>([]);
 let editing = ref("");
-// let router = useRouter();
 
 async function getPosts(author: string) {
   let query: Record<string, string> = { author };
-  console.log(query);
   let postResults;
   try {
     postResults = await fetchy("api/posts", "GET", { query });
   } catch (_) {
     return;
   }
-  // if (author) await router.push(`/${author}`);
   posts.value = postResults;
 }
 
@@ -33,22 +28,13 @@ function updateEditing(id: string) {
   editing.value = id;
 }
 
-onBeforeMount(async () => {
+onBeforeMount(async () => { // every time we mount this page, we first get the posts of the currently logged in user
   await getPosts(currentUsername.value);
   loaded.value = true;
 });
 </script>
 
 <template>
-  <!-- <section v-if="isLoggedIn">
-    <h2>Create a post:</h2>
-    <CreatePostForm @refreshPosts="getPosts" />
-  </section>
-  <div class="row">
-    <h2 v-if="!searchAuthor">Posts:</h2>
-    <h2 v-else>Posts by {{ searchAuthor }}:</h2>
-    <SearchPostForm @getPostsByAuthor="getPosts" />
-  </div> -->
   <div v-if="isLoggedIn">
     <section class="posts" v-if="loaded && posts.length !== 0">
       <article v-for="post in posts" :key="post._id">

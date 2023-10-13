@@ -5,21 +5,16 @@ import { useUserStore } from "@/stores/user";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
-import ProfileView from "../views/ProfileView.vue";
 import SettingView from "../views/SettingView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
+  // TODO 4: Add in the route for our new Profile page!
   routes: [
     {
       path: "/",
       name: "Home",
       component: HomeView,
-    },
-    {
-      path: "/profile",
-      name: "Profile",
-      component: ProfileView,
     },
     {
       path: "/setting",
