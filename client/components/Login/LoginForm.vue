@@ -10,7 +10,7 @@ async function login() {
   await loginUser(username.value, password.value);
   // TODO 3: Once we log in, how can we update the currently logged in user and navigate to their profile?
   // Hint 1: Look at this file in the original starter code to see how we currently do this for 'Home'
-  // Hint 2: Think carefully about whether we want to use 'void' or a differeny keyword before we grab our currently logged in user.
+  // Hint 2: Use "await" and NOT "void" when grabbing the logged in user to avoid a thread safety bug.
   // ---------------
   // Your code here!
   // ---------------
