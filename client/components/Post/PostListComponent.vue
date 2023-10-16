@@ -10,9 +10,10 @@ import { useSettingsStore } from "../../stores/settings";
 import SearchPostForm from "./SearchPostForm.vue";
 
 const { isLoggedIn } = storeToRefs(useUserStore());
-const { blockedUsers } = storeToRefs(useSettingsStore());
+const { suppressedUsers } = storeToRefs(useSettingsStore());
 
 const loaded = ref(false);
+let hidePostsFromSuppressedUsers = ref(true);
 let posts = ref<Array<Record<string, string>>>([]);
 let editing = ref("");
 let searchAuthor = ref("");
@@ -33,6 +34,10 @@ function updateEditing(id: string) {
   editing.value = id;
 }
 
+function updateSuppressionStatus() {
+  hidePostsFromSuppressedUsers.value = !hidePostsFromSuppressedUsers.value;
+}
+
 onBeforeMount(async () => {
   await getPosts();
   loaded.value = true;
@@ -49,9 +54,13 @@ onBeforeMount(async () => {
     <h2 v-else>Posts by {{ searchAuthor }}:</h2>
     <SearchPostForm @getPostsByAuthor="getPosts" />
   </div>
+  <div class="row">
+    <button v-if="hidePostsFromSuppressedUsers" class="btn-small pure-button" @click="updateSuppressionStatus">Show posts from suppressed users</button>
+    <button v-else class="btn-small pure-button" @click="updateSuppressionStatus">Hide posts from suppressed users</button>
+  </div>
   <section class="posts" v-if="loaded && posts.length !== 0">
     <article v-for="post in posts" :key="post._id">
-      <PostComponent v-if="editing !== post._id && !blockedUsers.includes(post.author)" :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
+      <PostComponent v-if="editing !== post._id && (!hidePostsFromSuppressedUsers || !suppressedUsers.includes(post.author))" :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
       <EditPostForm v-else-if="editing" :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
       <p v-else>This is a post from a user you've suppressed. </p>
     </article>
