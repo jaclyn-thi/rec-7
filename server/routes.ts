@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 
 import { Router, getExpressRouter } from "./framework/router";
 
-import { Friend, Post, User, WebSession } from "./app";
+import { Block, Friend, Post, User, WebSession } from "./app";
 import { PostDoc, PostOptions } from "./concepts/post";
 import { UserDoc } from "./concepts/user";
 import { WebSessionDoc } from "./concepts/websession";
@@ -135,6 +135,26 @@ class Routes {
     const user = WebSession.getUser(session);
     const fromId = (await User.getUserByUsername(from))._id;
     return await Friend.rejectRequest(fromId, user);
+  }
+
+  @Router.get("/block")
+  async getBlockedUsers(session: WebSessionDoc) {
+    const blocker = WebSession.getUser(session);
+    return await Responses.blockedUsernames(await Block.getBlockedUsers(blocker));
+  }
+
+  @Router.post("/block/:user")
+  async blockUser(session: WebSessionDoc, user: string) {
+    const blocker = WebSession.getUser(session);
+    const blockee = (await User.getUserByUsername(user))._id;
+    return await Block.add(blocker, blockee);
+  }
+
+  @Router.delete("/block/:user")
+  async unblockUser(session: WebSessionDoc, user: string) {
+    const blocker = WebSession.getUser(session);
+    const blockee = (await User.getUserByUsername(user))._id;
+    return await Block.remove(blocker, blockee);
   }
 }
 

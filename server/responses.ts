@@ -1,4 +1,5 @@
 import { User } from "./app";
+import { BlockDoc } from "./concepts/block";
 import { AlreadyFriendsError, FriendNotFoundError, FriendRequestAlreadyExistsError, FriendRequestDoc, FriendRequestNotFoundError } from "./concepts/friend";
 import { PostAuthorNotMatchError, PostDoc } from "./concepts/post";
 import { Router } from "./framework/router";
@@ -25,6 +26,14 @@ export default class Responses {
   static async posts(posts: PostDoc[]) {
     const authors = await User.idsToUsernames(posts.map((post) => post.author));
     return posts.map((post, i) => ({ ...post, author: authors[i] }));
+  }
+
+  /**
+   * Returns a list of usernames of blocked users
+   */
+  static async blockedUsernames(block: BlockDoc[]) {
+    const blockedUsernames = await User.idsToUsernames(block.map((block) => block.blockee));
+    return blockedUsernames;
   }
 
   /**

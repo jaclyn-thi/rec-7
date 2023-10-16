@@ -6,9 +6,11 @@ import { useUserStore } from "@/stores/user";
 import { fetchy } from "@/utils/fetchy";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
+import { useSettingsStore } from "../../stores/settings";
 import SearchPostForm from "./SearchPostForm.vue";
 
 const { isLoggedIn } = storeToRefs(useUserStore());
+const { blockedUsers } = storeToRefs(useSettingsStore());
 
 const loaded = ref(false);
 let posts = ref<Array<Record<string, string>>>([]);
@@ -49,8 +51,9 @@ onBeforeMount(async () => {
   </div>
   <section class="posts" v-if="loaded && posts.length !== 0">
     <article v-for="post in posts" :key="post._id">
-      <PostComponent v-if="editing !== post._id" :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
-      <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
+      <PostComponent v-if="editing !== post._id && !blockedUsers.includes(post.author)" :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
+      <EditPostForm v-else-if="editing" :post="post" @refreshPosts="getPosts" @editPost="updateEditing" />
+      <p v-else>This is a post from a user you've suppressed. </p>
     </article>
   </section>
   <p v-else-if="loaded">No posts found</p>
