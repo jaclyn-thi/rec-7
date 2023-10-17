@@ -6,11 +6,11 @@ import { fetchy } from "@/utils/fetchy";
 export const useSettingsStore = defineStore(
   "settings",
   () => {
-    let suppressedUsers = ref<Array<string>>([]);
+    const suppressedUsers = ref<Array<string>>([]);
 
     const suppressUser = async (username: string) => {
       try {
-        await fetchy(`api/suppression/${username}`, "POST");
+        await fetchy(`/api/suppression/${username}`, "POST");
       } catch {
         return;
       }
@@ -19,7 +19,7 @@ export const useSettingsStore = defineStore(
 
     const unsuppressUser = async (username: string) => {
       try {
-        await fetchy(`api/suppression/${username}`, "DELETE");
+        await fetchy(`/api/suppression/${username}`, "DELETE");
       } catch {
         return;
       }
@@ -29,7 +29,7 @@ export const useSettingsStore = defineStore(
     const updateSuppressedUsers = async () => {
         let suppressedUsersResults;
         try {
-            suppressedUsersResults = await fetchy("api/suppression", "GET");
+            suppressedUsersResults = await fetchy("/api/suppression", "GET");
             suppressedUsers.value = suppressedUsersResults;
           } catch (_) {
             suppressedUsers.value = [];
