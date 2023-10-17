@@ -6,7 +6,7 @@ import { fetchy } from "@/utils/fetchy";
 export const useSettingsStore = defineStore(
   "settings",
   () => {
-    let suppressedUsers = ref<Array<Record<string, string>>>([]);
+    let suppressedUsers = ref<Array<string>>([]);
 
     const suppressUser = async (username: string) => {
       try {
