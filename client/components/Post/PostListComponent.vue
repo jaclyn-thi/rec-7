@@ -35,7 +35,7 @@ function updateEditing(id: string) {
   editing.value = id;
 }
 
-function updateSuppressionStatus() {
+function toggleSuppressionStatus() {
   hidePostsFromSuppressedUsers.value = !hidePostsFromSuppressedUsers.value;
 }
 
@@ -57,8 +57,8 @@ onBeforeMount(async () => {
     <SearchPostForm @getPostsByAuthor="getPosts" />
   </div>
   <div v-if="isLoggedIn" class="row">
-    <button v-if="hidePostsFromSuppressedUsers" class="btn-small pure-button" @click="updateSuppressionStatus">Show posts from suppressed users</button>
-    <button v-else class="btn-small pure-button" @click="updateSuppressionStatus">Hide posts from suppressed users</button>
+    <button v-if="hidePostsFromSuppressedUsers" class="btn-small pure-button" @click="toggleSuppressionStatus">Show posts from suppressed users</button>
+    <button v-else class="btn-small pure-button" @click="toggleSuppressionStatus">Hide posts from suppressed users</button>
   </div>
   <section class="posts" v-if="loaded && posts.length !== 0">
     <article v-for="post in posts" :key="post._id">
