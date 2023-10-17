@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
+import { formatDate } from "@/utils/formatDate";
 import { storeToRefs } from "pinia";
 import { fetchy } from "../../utils/fetchy";
-import { formatDate } from "@/utils/formatDate";
 
 const props = defineProps(["post"]);
 const emit = defineEmits(["editPost", "refreshPosts"]);
@@ -10,7 +10,7 @@ const { currentUsername } = storeToRefs(useUserStore());
 
 const deletePost = async () => {
   try {
-    await fetchy(`api/posts/${props.post._id}`, "DELETE");
+    await fetchy(`/api/posts/${props.post._id}`, "DELETE");
   } catch {
     return;
   }
