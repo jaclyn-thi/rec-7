@@ -8,7 +8,7 @@ import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 import SearchPostForm from "./SearchPostForm.vue";
 
-const { isLoggedIn } = storeToRefs(useUserStore());
+const { currentUsername, isLoggedIn } = storeToRefs(useUserStore());
 
 // TODO: When hidePostsFromSuppressedUsers is true, display text saying "This is a post from a user you've suppressed" in
 // place of the post information for every post by a suppressed user.
@@ -18,6 +18,7 @@ let hidePostsFromSuppressedUsers = ref(true);
 let posts = ref<Array<Record<string, string>>>([]);
 let editing = ref("");
 let searchAuthor = ref("");
+const props = defineProps(["own"]);
 
 async function getPosts(author?: string) {
   let query: Record<string, string> = author !== undefined ? { author } : {};
@@ -40,7 +41,11 @@ function toggleSuppressionStatus() {
 }
 
 onBeforeMount(async () => {
-  await getPosts();
+  if (props.own) {
+    await getPosts(currentUsername.value);
+  } else {
+    await getPosts();
+  }
   loaded.value = true;
 });
 </script>
@@ -53,9 +58,9 @@ onBeforeMount(async () => {
   <div class="row">
     <h2 v-if="!searchAuthor">Posts:</h2>
     <h2 v-else>Posts by {{ searchAuthor }}:</h2>
-    <SearchPostForm @getPostsByAuthor="getPosts" />
+    <SearchPostForm v-if="!props.own" @getPostsByAuthor="getPosts" />
   </div>
-  <div v-if="isLoggedIn" class="row">
+  <div v-if="isLoggedIn && !props.own" class="row">
     <button v-if="hidePostsFromSuppressedUsers" class="btn-small pure-button" @click="toggleSuppressionStatus">Show posts from suppressed users</button>
     <button v-else class="btn-small pure-button" @click="toggleSuppressionStatus">Hide posts from suppressed users</button>
   </div>
