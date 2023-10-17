@@ -151,7 +151,7 @@ class Routes {
   }
 
   @Router.delete("/suppression/:user")
-  async unsupressUser(session: WebSessionDoc, user: string) {
+  async unsuppressUser(session: WebSessionDoc, user: string) {
     const suppresser = WebSession.getUser(session);
     const suppressee = (await User.getUserByUsername(user))._id;
     return await Suppression.remove(suppresser, suppressee);

@@ -5,7 +5,7 @@ import { ref } from "vue";
 let suppressee = ref("");
 let unsuppressee = ref("");
 
-const { suppressUser, unsupressUser } = useSettingsStore();
+const { suppressUser, unsuppressUser } = useSettingsStore();
 
 async function addSuppression() {
   await suppressUser(suppressee.value);
@@ -13,13 +13,13 @@ async function addSuppression() {
 }
 
 async function removeSuppression() {
-  await unsupressUser(unsuppressee.value);
+  await unsuppressUser(unsuppressee.value);
   unsuppressee.value = "";
 }
 </script>
 
 <template>
-  <h2>Suppress/unsupress users</h2>
+  <h2>Suppress/unsuppress users</h2>
   <form @submit.prevent="addSuppression" class="pure-form">
     <fieldset>
       <legend>Suppress a user</legend>
@@ -30,7 +30,7 @@ async function removeSuppression() {
 
   <form @submit.prevent="removeSuppression" class="pure-form">
     <fieldset>
-      <legend>Unsupress a user</legend>
+      <legend>Unsuppress a user</legend>
       <input type="text" placeholder="Username of user to unsuppress" v-model="unsuppressee" required />
       <button type="submit" class="pure-button pure-button-primary">Unsuppress user</button>
     </fieldset>

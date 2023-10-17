@@ -11,6 +11,7 @@ import SearchPostForm from "./SearchPostForm.vue";
 
 const { isLoggedIn } = storeToRefs(useUserStore());
 const { suppressedUsers } = storeToRefs(useSettingsStore());
+const { updateSuppressedUsers } = useSettingsStore();
 
 const loaded = ref(false);
 let hidePostsFromSuppressedUsers = ref(true);
@@ -40,6 +41,7 @@ function updateSuppressionStatus() {
 
 onBeforeMount(async () => {
   await getPosts();
+  await updateSuppressedUsers();
   loaded.value = true;
 });
 </script>
@@ -54,7 +56,7 @@ onBeforeMount(async () => {
     <h2 v-else>Posts by {{ searchAuthor }}:</h2>
     <SearchPostForm @getPostsByAuthor="getPosts" />
   </div>
-  <div class="row">
+  <div v-if="isLoggedIn" class="row">
     <button v-if="hidePostsFromSuppressedUsers" class="btn-small pure-button" @click="updateSuppressionStatus">Show posts from suppressed users</button>
     <button v-else class="btn-small pure-button" @click="updateSuppressionStatus">Hide posts from suppressed users</button>
   </div>
