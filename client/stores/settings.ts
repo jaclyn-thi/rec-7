@@ -27,21 +27,21 @@ export const useSettingsStore = defineStore(
     };
 
     const updateSuppressedUsers = async () => {
-        let suppressedUsersResults;
-        try {
-            suppressedUsersResults = await fetchy("/api/suppression", "GET");
-            suppressedUsers.value = suppressedUsersResults;
-          } catch (_) {
-            suppressedUsers.value = [];
-          }
-          suppressedUsers.value = suppressedUsersResults;
-    }
+      let suppressedUsersResults;
+      try {
+        suppressedUsersResults = await fetchy("/api/suppression", "GET");
+        suppressedUsers.value = suppressedUsersResults;
+      } catch (_) {
+        suppressedUsers.value = [];
+      }
+      suppressedUsers.value = suppressedUsersResults;
+    };
 
     return {
       suppressedUsers,
       suppressUser,
       unsuppressUser,
-      updateSuppressedUsers
+      updateSuppressedUsers,
     };
   },
   { persist: true },
