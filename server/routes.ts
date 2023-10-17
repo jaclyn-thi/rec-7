@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 
 import { Router, getExpressRouter } from "./framework/router";
 
-import { Block, Friend, Post, User, WebSession } from "./app";
+import { Friend, Post, Suppression, User, WebSession } from "./app";
 import { PostDoc, PostOptions } from "./concepts/post";
 import { UserDoc } from "./concepts/user";
 import { WebSessionDoc } from "./concepts/websession";
@@ -137,24 +137,24 @@ class Routes {
     return await Friend.rejectRequest(fromId, user);
   }
 
-  @Router.get("/block")
-  async getBlockedUsers(session: WebSessionDoc) {
-    const blocker = WebSession.getUser(session);
-    return await Responses.blockedUsernames(await Block.getBlockedUsers(blocker));
+  @Router.get("/suppression")
+  async getSuppressedUsers(session: WebSessionDoc) {
+    const suppressor = WebSession.getUser(session);
+    return await Responses.suppressedUsernames(await Suppression.getSuppressedUsers(suppressor));
   }
 
-  @Router.post("/block/:user")
-  async blockUser(session: WebSessionDoc, user: string) {
-    const blocker = WebSession.getUser(session);
-    const blockee = (await User.getUserByUsername(user))._id;
-    return await Block.add(blocker, blockee);
+  @Router.post("/suppression/:user")
+  async suppressUser(session: WebSessionDoc, user: string) {
+    const suppresser = WebSession.getUser(session);
+    const suppressee = (await User.getUserByUsername(user))._id;
+    return await Suppression.add(suppresser, suppressee);
   }
 
-  @Router.delete("/block/:user")
-  async unblockUser(session: WebSessionDoc, user: string) {
-    const blocker = WebSession.getUser(session);
-    const blockee = (await User.getUserByUsername(user))._id;
-    return await Block.remove(blocker, blockee);
+  @Router.delete("/suppression/:user")
+  async unsupressUser(session: WebSessionDoc, user: string) {
+    const suppresser = WebSession.getUser(session);
+    const suppressee = (await User.getUserByUsername(user))._id;
+    return await Suppression.remove(suppresser, suppressee);
   }
 }
 

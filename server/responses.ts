@@ -1,7 +1,7 @@
 import { User } from "./app";
-import { BlockDoc } from "./concepts/block";
 import { AlreadyFriendsError, FriendNotFoundError, FriendRequestAlreadyExistsError, FriendRequestDoc, FriendRequestNotFoundError } from "./concepts/friend";
 import { PostAuthorNotMatchError, PostDoc } from "./concepts/post";
+import { SuppressionDoc } from "./concepts/suppression";
 import { Router } from "./framework/router";
 
 /**
@@ -29,11 +29,11 @@ export default class Responses {
   }
 
   /**
-   * Returns a list of usernames of blocked users
+   * Returns a list of usernames of suppressed users
    */
-  static async blockedUsernames(block: BlockDoc[]) {
-    const blockedUsernames = await User.idsToUsernames(block.map((block) => block.blockee));
-    return blockedUsernames;
+  static async suppressedUsernames(suppression: SuppressionDoc[]) {
+    const suppressedUsernames = await User.idsToUsernames(suppression.map((suppression) => suppression.suppressee));
+    return suppressedUsernames;
   }
 
   /**

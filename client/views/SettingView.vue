@@ -2,7 +2,7 @@
 import router from "@/router";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
-import BlockUnblockUserForm from "../components/Setting/BlockUnblockUserForm.vue";
+import SuppressUnsuppressUserForm from "../components/Setting/SuppressUnsuppressUserForm.vue";
 import UpdateUserForm from "../components/Setting/UpdateUserForm.vue";
 
 const { currentUsername } = storeToRefs(useUserStore());
@@ -25,6 +25,6 @@ async function delete_() {
     <button class="pure-button pure-button-primary" @click="logout">Logout</button>
     <button class="button-error pure-button" @click="delete_">Delete User</button>
     <UpdateUserForm />
-    <BlockUnblockUserForm />
+    <SuppressUnsuppressUserForm />
   </main>
 </template>

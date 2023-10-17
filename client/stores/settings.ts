@@ -6,42 +6,42 @@ import { fetchy } from "@/utils/fetchy";
 export const useSettingsStore = defineStore(
   "settings",
   () => {
-    let blockedUsers = ref<Array<Record<string, string>>>([]);
+    let suppressedUsers = ref<Array<Record<string, string>>>([]);
 
-    const blockUser = async (username: string) => {
+    const suppressUser = async (username: string) => {
       try {
-        await fetchy(`api/block/${username}`, "POST");
+        await fetchy(`api/suppression/${username}`, "POST");
       } catch {
         return;
       }
-      updateBlockedUsers();
+      updateSuppressedUsers();
     };
 
-    const unblockUser = async (username: string) => {
+    const unsuppressUser = async (username: string) => {
       try {
-        await fetchy(`api/block/${username}`, "DELETE");
+        await fetchy(`api/suppression/${username}`, "DELETE");
       } catch {
         return;
       }
-      updateBlockedUsers();
+      updateSuppressedUsers();
     };
 
-    const updateBlockedUsers = async () => {
-        let blockedUsersResults;
+    const updateSuppressedUsers = async () => {
+        let suppressedUsersResults;
         try {
-            blockedUsersResults = await fetchy("api/block", "GET");
-            blockedUsers.value = blockedUsersResults;
+            suppressedUsersResults = await fetchy("api/suppression", "GET");
+            suppressedUsers.value = suppressedUsersResults;
           } catch (_) {
-            blockedUsers.value = [];
+            suppressedUsers.value = [];
           }
-        blockedUsers.value = blockedUsersResults;
+          suppressedUsers.value = suppressedUsersResults;
     }
 
     return {
-      blockedUsers,
-      blockUser,
-      unblockUser,
-      updateBlockedUsers
+      suppressedUsers,
+      suppressUser,
+      unsuppressUser,
+      updateSuppressedUsers
     };
   },
   { persist: true },

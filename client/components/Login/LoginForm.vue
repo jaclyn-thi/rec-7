@@ -6,12 +6,12 @@ import { ref } from "vue";
 const username = ref("");
 const password = ref("");
 const { loginUser, updateSession } = useUserStore();
-const { updateBlockedUsers } = useSettingsStore();
+const { updateSuppressedUsers } = useSettingsStore();
 
 async function login() {
   await loginUser(username.value, password.value);
   await updateSession();
-  await updateBlockedUsers();
+  await updateSuppressedUsers();
   // TODO 3: Once we log in, how can we update the currently logged in user and navigate to their profile?
   // Hint 1: Look at this file in the original starter code to see how we currently do this for 'Home'
   // Hint 2: Use "await" and NOT "void" when grabbing the logged in user to avoid a thread safety bug.
