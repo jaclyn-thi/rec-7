@@ -15,20 +15,20 @@ export const useUserStore = defineStore(
     };
 
     const createUser = async (username: string, password: string) => {
-      await fetchy("api/users", "POST", {
+      await fetchy("/api/users", "POST", {
         body: { username, password },
       });
     };
 
     const loginUser = async (username: string, password: string) => {
-      await fetchy("api/login", "POST", {
+      await fetchy("/api/login", "POST", {
         body: { username, password },
       });
     };
 
     const updateSession = async () => {
       try {
-        const { username } = await fetchy("api/session", "GET", { alert: false });
+        const { username } = await fetchy("/api/session", "GET", { alert: false });
         currentUsername.value = username;
       } catch {
         currentUsername.value = "";
@@ -36,16 +36,16 @@ export const useUserStore = defineStore(
     };
 
     const logoutUser = async () => {
-      await fetchy("api/logout", "POST");
+      await fetchy("/api/logout", "POST");
       resetStore();
     };
 
     const updateUser = async (patch: BodyT) => {
-      await fetchy("api/users", "PATCH", { body: { update: patch } });
+      await fetchy("/api/users", "PATCH", { body: { update: patch } });
     };
 
     const deleteUser = async () => {
-      await fetchy("api/users", "DELETE");
+      await fetchy("/api/users", "DELETE");
       resetStore();
     };
 
