@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
 import { ref } from "vue";
-import router from "../../router";
 
 const username = ref("");
 const password = ref("");
@@ -14,8 +13,7 @@ async function login() {
   // Hint 1: Look at this file in the original starter code to see how we currently do this for 'Home'
   // Hint 2: Use "await" and NOT "void" when grabbing the logged in user to avoid a thread safety bug.
   // ---------------
-  await updateSession();
-  void router.push({ name: "Profile" });
+  // Your code here!
   // ---------------
 }
 </script>
